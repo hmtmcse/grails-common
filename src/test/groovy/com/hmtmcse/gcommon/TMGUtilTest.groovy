@@ -9,15 +9,43 @@ class TMGUtilTest {
     public void testHumanReadable() {
         [
                 [
-                        "input": "CamelCase_With_underscore",
-                        "result": "Camel case with underscore",
+                        "input" : "this__Only-----Camel-_Case-_-",
+                        "result": "This only camel case",
                 ],
                 [
-                        "input": "_newText-happen",
+                        "input" : "This only camel case",
+                        "result": "This only camel case",
+                ],
+                [
+                        "input" : "This Only Camel       Case",
+                        "result": "This only camel case",
+                ],
+                [
+                        "input" : "- newText - happen",
                         "result": "New text happen",
                 ],
                 [
-                        "input": "ThisOnlyCamelCase",
+                        "input" : "CamelCase_With_underscore",
+                        "result": "Camel case with underscore",
+                ],
+                [
+                        "input" : "_newText-happen",
+                        "result": "New text happen",
+                ],
+                [
+                        "input" : "-_newText-happen",
+                        "result": "New text happen",
+                ],
+                [
+                        "input" : "-newText-happen",
+                        "result": "New text happen",
+                ],
+                [
+                        "input" : "ThisOnlyCamelCase",
+                        "result": "This only camel case",
+                ],
+                [
+                        "input" : "this only-Camel_Case",
                         "result": "This only camel case",
                 ]
         ].each { Map map ->

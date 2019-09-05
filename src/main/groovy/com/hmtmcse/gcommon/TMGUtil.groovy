@@ -2,14 +2,26 @@ package com.hmtmcse.gcommon
 
 class TMGUtil {
 
-    public static String makeHumReadable(String text){
+    public static String makeHumReadable(String text) {
 
-        String underscoreTo
 
-        text.replaceAll( "(_)([A-Za-z0-9])", {
-            Object[] it -> it[2].toUpperCase()
-        } )
-        return text.replace("/(?<=[a-z])[A-Z]/", "")
+
+        String underscoreToSpace = text.replaceAll("(_+)([A-Za-z0-9_])", {
+            Object[] it -> " " + it[2]?.trim()
+        })
+
+        String camelCaseToSpace =  underscoreToSpace.replaceAll("(\\s*[A-Z])", {
+            Object[] it -> " " + it[0]?.trim()
+        })
+
+        String hyphenToSpace = camelCaseToSpace.replaceAll("\\s*[\\-_]*\\s*", {
+            Object[] it -> it[0].equals("")?"":" "
+        })
+
+        if (hyphenToSpace){
+            return hyphenToSpace.trim().toLowerCase().capitalize()
+        }
+        return text
     }
 
     public static String toCamelCase( String text, boolean capitalized = false ) {
