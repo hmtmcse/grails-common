@@ -2,13 +2,14 @@
 
 apply from: "${rootProject.projectDir}/gradle/junit5-test.gradle"
 
-apply plugin: 'groovy'
+//apply plugin: 'groovy'
 
 
 version "1.0.0"
 group "com.hmtmcse.gcommon"
 
 sourceCompatibility = 1.8
+
 
 repositories {
     mavenLocal()
