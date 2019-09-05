@@ -1,5 +1,7 @@
 package com.hmtmcse.gcommon
 
+import org.grails.web.util.WebUtils
+
 class TMGUtil {
 
     public static String makeHumReadable(String text) {
@@ -33,6 +35,14 @@ class TMGUtil {
 
     static uuid(){
         return UUID.randomUUID().toString().toUpperCase()
+    }
+
+    static getAppSession() {
+        return WebUtils.retrieveGrailsWebRequest().session
+    }
+
+    static invalidateSession() {
+        return appSession.invalidate()
     }
 
 }
