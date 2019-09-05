@@ -1,6 +1,24 @@
 
 
+apply from: "${rootProject.projectDir}/gradle/junit5-test.gradle"
+
+apply plugin: 'groovy'
+
+
 version "1.0.0"
 group "com.hmtmcse.gcommon"
 
-dependencies {}
+sourceCompatibility = 1.8
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+    maven { url "https://repo.grails.org/grails/core" }
+    maven { url "https://dl.bintray.com/hmtmcse/maven/" }
+    maven { url "http://central.maven.org/maven2/" }
+}
+
+
+dependencies {
+    compile 'org.codehaus.groovy:groovy-all:2.5.6'
+}
