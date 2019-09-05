@@ -3,9 +3,6 @@ package com.hmtmcse.gcommon
 class TMGUtil {
 
     public static String makeHumReadable(String text) {
-
-
-
         String underscoreToSpace = text.replaceAll("(_+)([A-Za-z0-9_])", {
             Object[] it -> " " + it[2]?.trim()
         })
