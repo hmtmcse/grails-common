@@ -1,5 +1,6 @@
 package com.hmtmcse.gcommon
 
+import grails.util.Holders
 import org.grails.web.util.WebUtils
 
 class TMGUtil {
@@ -45,4 +46,22 @@ class TMGUtil {
         return appSession.invalidate()
     }
 
+    static appBaseUrlHostWithPort(){
+        String urlString = ApplicationConfig.appBaseUrl()
+        URL url = new URL(urlString)
+        String port = ""
+        if (url.getPort() > 0){
+            port = ":${url.getPort()}"
+        }
+        return "${url.getHost()}${port}"
+    }
+
+
+    static def getBean(String beanIdentifier) {
+        try {
+            return Holders.grailsApplication.mainContext.getBean(beanIdentifier)
+        } catch (Exception e) {
+            return null
+        }
+    }
 }
