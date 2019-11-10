@@ -34,7 +34,7 @@ class TMGUtil {
         text.replaceAll( /([A-Z])/, /_$1/ ).toLowerCase().replaceAll( /^_/, '' )
     }
 
-    static uuid(){
+    static String uuid(){
         return UUID.randomUUID().toString().toUpperCase()
     }
 
@@ -64,4 +64,5 @@ class TMGUtil {
             return null
         }
     }
+
 }
