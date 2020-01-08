@@ -8,7 +8,7 @@ class BootStrap {
 
     def init = { servletContext ->
 //        WebSocketHandler.init(servletContext)
-//    }
+    }
 
     def destroy = {
     }
