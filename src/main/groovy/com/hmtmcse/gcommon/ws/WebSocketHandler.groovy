@@ -51,7 +51,11 @@ class WebSocketHandler {
 
     static void  init(final ServletContext servletContext) {
         final ServerContainer serverContainer = servletContext.getAttribute("javax.websocket.server.ServerContainer")
-        serverContainer.addEndpoint(WebSocketHandler.class)
+        println("servletContext")
+        println(servletContext)
+        println("serverContainer")
+        println(serverContainer)
+        serverContainer.addEndpoint(WebSocketHandler)
         serverContainer.defaultMaxSessionIdleTimeout = 0
         clientRemoveScheduler.scheduleAtFixedRate(new Runnable() {
             @Override
