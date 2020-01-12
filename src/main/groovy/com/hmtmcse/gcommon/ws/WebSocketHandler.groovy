@@ -50,23 +50,27 @@ class WebSocketHandler {
 
 
     static void  init(final ServletContext servletContext) {
-        final ServerContainer serverContainer = servletContext.getAttribute("javax.websocket.server.ServerContainer")
-        println("servletContext")
-        println(servletContext)
-        println("serverContainer")
-        println(serverContainer)
-        serverContainer.addEndpoint(WebSocketHandler)
-        serverContainer.defaultMaxSessionIdleTimeout = 0
-        clientRemoveScheduler.scheduleAtFixedRate(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    clients.removeAll { !it.isOpen() }
-                }
-                catch (Exception ex) {
+        try{
+            final ServerContainer serverContainer = servletContext.getAttribute("javax.websocket.server.ServerContainer")
+            println("servletContext")
+            println(servletContext)
+            println("serverContainer")
+            println(serverContainer)
+            serverContainer.addEndpoint(WebSocketHandler)
+            serverContainer.defaultMaxSessionIdleTimeout = 0
+            clientRemoveScheduler.scheduleAtFixedRate(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        clients.removeAll { !it.isOpen() }
+                    }
+                    catch (Exception ex) {
 
+                    }
                 }
-            }
-        }, 1000L * 10)
+            }, 1000L * 10)
+        }catch(Exception e){
+            println("WebSocket Initilization Exception: ${e.getMessage()}")
+        }
     }
 }
