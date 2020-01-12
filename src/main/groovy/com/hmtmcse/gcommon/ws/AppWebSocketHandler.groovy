@@ -59,8 +59,7 @@ class AppWebSocketHandler {
             println(servletContext)
             println("serverContainer")
             println(serverContainer)
-            serverContainer.addEndpoint(AppWebSocketHandler)
-            serverContainer.defaultMaxSessionIdleTimeout = 0
+
             clientRemoveScheduler.scheduleAtFixedRate(new Runnable() {
                 @Override
                 public void run() {
@@ -73,6 +72,8 @@ class AppWebSocketHandler {
                     }
                 }
             }, 1000L * 10)
+            serverContainer.addEndpoint(AppWebSocketHandler)
+            serverContainer.defaultMaxSessionIdleTimeout = 0
         }catch(Exception e){
             System.err.println("WebSocket Initilization Exception: ${e.getMessage()}")
         }
