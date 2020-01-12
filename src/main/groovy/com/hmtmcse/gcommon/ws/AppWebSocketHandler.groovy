@@ -10,8 +10,8 @@ import javax.websocket.server.ServerContainer
 import javax.websocket.server.ServerEndpoint
 
 @WebListener
-@ServerEndpoint(value = "/grails-common/websocket", configurator = WebSocketConfigurator.class)
-class WebSocketHandler {
+@ServerEndpoint(value = "/grails-common/websocket", configurator = AppWebSocketConfigurator.class)
+class AppWebSocketHandler {
     static final Set<Session> clients = ([] as Set).asSynchronized()
     private static TaskScheduler clientRemoveScheduler = new ConcurrentTaskScheduler()
 
@@ -59,7 +59,7 @@ class WebSocketHandler {
             println(servletContext)
             println("serverContainer")
             println(serverContainer)
-            serverContainer.addEndpoint(WebSocketHandler)
+            serverContainer.addEndpoint(AppWebSocketHandler)
             serverContainer.defaultMaxSessionIdleTimeout = 0
             clientRemoveScheduler.scheduleAtFixedRate(new Runnable() {
                 @Override

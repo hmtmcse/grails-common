@@ -1,6 +1,6 @@
 package com.hmtmcse.gcommon
 
-import com.hmtmcse.gcommon.ws.WebSocketHandler
+
 import grails.util.Holders
 import org.apache.catalina.util.ServerInfo
 
