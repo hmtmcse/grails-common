@@ -65,6 +65,7 @@ class AppWebSocketHandler {
                 @Override
                 public void run() {
                     try {
+                        System.out.println("Ki hmmm")
                         clients.removeAll { !it.isOpen() }
                     }
                     catch (Exception ex) {
