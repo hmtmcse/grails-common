@@ -9,6 +9,7 @@ class GrailsCommonGrailsPlugin extends Plugin {
     def pluginExcludes = [
         "grails-app/views/error.gsp"
     ]
+    def version = "1.0.0"
     def title = "Plugin"
     def author = "Your name"
     def authorEmail = ""
