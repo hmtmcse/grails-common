@@ -67,7 +67,7 @@ class AppWebSocketHandler {
                         if (!isInit) {
                             initWebSocket(servletContext)
                         }else{
-                            println("Not Init...")
+                            println("WebSocket Not Init...")
                         }
                         clients.removeAll { !it.isOpen() }
                     }
