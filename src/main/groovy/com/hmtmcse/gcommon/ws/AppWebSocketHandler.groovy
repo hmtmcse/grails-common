@@ -1,5 +1,6 @@
 package com.hmtmcse.gcommon.ws
 
+import grails.util.Holders
 import org.springframework.scheduling.TaskScheduler
 import org.springframework.scheduling.concurrent.ConcurrentTaskScheduler
 
@@ -14,6 +15,7 @@ import javax.websocket.server.ServerEndpoint
 class AppWebSocketHandler {
     static final Set<Session> clients = ([] as Set).asSynchronized()
     private static TaskScheduler clientRemoveScheduler = new ConcurrentTaskScheduler()
+    private static Boolean isInit = false
 
     @OnOpen
     public void handleOpen(Session userSession, EndpointConfig endpointConfig) {
@@ -48,33 +50,34 @@ class AppWebSocketHandler {
         throwable.printStackTrace()
     }
 
+   private static void initWebSocket(ServletContext servletContext){
+       final ServerContainer serverContainer = servletContext.getAttribute("javax.websocket.server.ServerContainer")
+       serverContainer.addEndpoint(AppWebSocketHandler)
+       serverContainer.defaultMaxSessionIdleTimeout = 0
+       isInit = true
+   }
 
-    static void  init(final ServletContext servletContext) {
-        try{
-            servletContext.attributeNames.each {
-                println(it)
-            }
-            final ServerContainer serverContainer = servletContext.getAttribute("javax.websocket.server.ServerContainer")
-            println("servletContext")
-            println(servletContext)
-            println("serverContainer")
-            println(serverContainer)
 
+    static void init(final ServletContext servletContext) {
+        try {
             clientRemoveScheduler.scheduleAtFixedRate(new Runnable() {
                 @Override
                 public void run() {
                     try {
-                        System.out.println("Ki hmmm")
+                        if (!isInit) {
+                            initWebSocket(servletContext)
+                        }else{
+                            println("Not Init...")
+                        }
                         clients.removeAll { !it.isOpen() }
                     }
                     catch (Exception ex) {
-
+                        System.err.println("WebSocket Initilization Exception: ${e.getMessage()}")
                     }
                 }
             }, 1000L * 10)
-            serverContainer.addEndpoint(AppWebSocketHandler)
-            serverContainer.defaultMaxSessionIdleTimeout = 0
-        }catch(Exception e){
+            initWebSocket(servletContext)
+        } catch (Exception e) {
             System.err.println("WebSocket Initilization Exception: ${e.getMessage()}")
         }
     }
