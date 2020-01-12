@@ -51,7 +51,10 @@ class WebSocketHandler {
 
     static void  init(final ServletContext servletContext) {
         try{
-            final ServerContainer serverContainer = servletContext.getAttribute("org.apache.tomcat.websocket.server.WsServerContainer")
+            servletContext.attributeNames.each {
+                println(it)
+            }
+            final ServerContainer serverContainer = servletContext.getAttribute("javax.websocket.server.ServerContainer")
             println("servletContext")
             println(servletContext)
             println("serverContainer")
