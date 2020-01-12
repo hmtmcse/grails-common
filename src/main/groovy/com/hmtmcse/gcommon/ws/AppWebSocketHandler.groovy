@@ -72,7 +72,7 @@ class AppWebSocketHandler {
                         clients.removeAll { !it.isOpen() }
                     }
                     catch (Exception ex) {
-                        System.err.println("WebSocket Initilization Exception: ${e.getMessage()}")
+                        System.err.println("WebSocket Initilization Exception: ${ex.getMessage()}")
                     }
                 }
             }, 1000L * 10)
