@@ -17,6 +17,7 @@ class BootStrap {
     }
 
     public infoPrinter() {
+        println("\n")
         println("Tomcat Information")
         println("----------------------------------------------------------------------")
         println("Server Info: ${ServerInfo.serverInfo}")
@@ -26,8 +27,11 @@ class BootStrap {
         println("\n")
         println("Grails Plugin Information")
         println("----------------------------------------------------------------------")
+        Integer i = 1
         Holders.applicationContext.getBean("pluginManager").allPlugins.each{ plugin ->
-            println(plugin.name + " " + plugin.version)
+            println(i + ". " + plugin.name + " " + plugin.version)
+            i++
         }
+        println("\n")
     }
 }
