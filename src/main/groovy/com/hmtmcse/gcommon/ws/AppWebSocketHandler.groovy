@@ -75,7 +75,6 @@ class AppWebSocketHandler {
                     }
                 }
             }, 1000L * 10)
-            initWebSocket(servletContext)
         } catch (Exception e) {
             System.err.println("WebSocket Initilization Exception: ${e.getMessage()}")
         }
