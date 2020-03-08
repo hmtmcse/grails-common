@@ -1,9 +1,7 @@
 package com.hmtmcse.gcommon.ws
 
-import grails.util.Holders
 import org.springframework.scheduling.TaskScheduler
 import org.springframework.scheduling.concurrent.ConcurrentTaskScheduler
-
 import javax.servlet.ServletContext
 import javax.servlet.annotation.WebListener
 import javax.websocket.*
@@ -11,7 +9,7 @@ import javax.websocket.server.ServerContainer
 import javax.websocket.server.ServerEndpoint
 
 @WebListener
-@ServerEndpoint(value = "/grails-common/websocket", configurator = AppWebSocketConfigurator.class)
+@ServerEndpoint(value = "/grails-common/websocket/", configurator = AppWebSocketConfigurator.class)
 class AppWebSocketHandler {
     static final Set<Session> clients = ([] as Set).asSynchronized()
     private static TaskScheduler clientRemoveScheduler = new ConcurrentTaskScheduler()
