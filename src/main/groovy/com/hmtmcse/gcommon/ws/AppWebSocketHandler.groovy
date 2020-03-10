@@ -53,7 +53,7 @@ class AppWebSocketHandler {
                 println(i.getMessage())
             }
             privateClients.findAll {
-                it.identity && it.identity.equals(identity)
+                it.identity && it.identity.equals(identity) && it.session.isOpen()
             }.each { it.session.basicRemote.sendText(json) }
         } else {
             clients.findAll { it.isOpen() }.each { it.basicRemote.sendText(message) }

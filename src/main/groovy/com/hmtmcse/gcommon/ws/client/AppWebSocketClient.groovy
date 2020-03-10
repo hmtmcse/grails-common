@@ -2,6 +2,7 @@ package com.hmtmcse.gcommon.ws.client
 
 import javax.websocket.CloseReason
 import javax.websocket.OnClose
+import javax.websocket.OnError
 import javax.websocket.OnMessage
 import javax.websocket.OnOpen
 import javax.websocket.Session
@@ -29,8 +30,12 @@ class AppWebSocketClient {
     @OnOpen
     public void onOpen(Session userSession) {
         this.wsSession = userSession;
+        println("Connected: ${userSession.id}")
     }
 
+    @OnError
+    public void onError(Session session, Throwable throwable) {
+    }
 
     @OnClose
     public void onClose(Session session, CloseReason reason) {
@@ -66,7 +71,7 @@ class AppWebSocketClient {
         if (wsSession) {
             wsSession.close()
         }
-        waitLock.notifyAll()
+        waitUntilFinish(true)
     }
 
     public static AppWebSocketClient instance(String wsUrl, WsMessage wsMessage) throws AppWsException {
@@ -76,10 +81,14 @@ class AppWebSocketClient {
         return new AppWebSocketClient(wsUrl, wsMessage)
     }
 
-    private void waitUntilFinish() {
+    private void waitUntilFinish(Boolean isFinish = false) {
         synchronized (waitLock) {
             try {
-                waitLock.wait();
+                if (isFinish) {
+                    waitLock.notify()
+                } else {
+                    waitLock.wait();
+                }
             } catch (InterruptedException e) {
             }
         }
