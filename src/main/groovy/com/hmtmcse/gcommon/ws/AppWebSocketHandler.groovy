@@ -1,24 +1,32 @@
 package com.hmtmcse.gcommon.ws
 
+import com.hmtmcse.gcommon.ws.data.WsMessage
+import com.hmtmcse.gcommon.ws.data.WsPrivateClient
+import com.hmtmcse.parser4java.JsonProcessor
 import org.springframework.scheduling.TaskScheduler
 import org.springframework.scheduling.concurrent.ConcurrentTaskScheduler
 import javax.servlet.ServletContext
 import javax.servlet.annotation.WebListener
 import javax.websocket.*
+import javax.websocket.server.PathParam
 import javax.websocket.server.ServerContainer
 import javax.websocket.server.ServerEndpoint
 
 @WebListener
-@ServerEndpoint(value = "/grails-common/websocket/", configurator = AppWebSocketConfigurator.class)
+@ServerEndpoint(value = "/grails-common/websocket/{identity}", configurator = AppWebSocketConfigurator.class)
 class AppWebSocketHandler {
     static final Set<Session> clients = ([] as Set).asSynchronized()
+    static final Set<WsPrivateClient> privateClients = ([] as Set).asSynchronized()
     private static TaskScheduler clientRemoveScheduler = new ConcurrentTaskScheduler()
     private static Boolean isInit = false
 
     @OnOpen
-    public void handleOpen(Session userSession, EndpointConfig endpointConfig) {
-        clients.add(userSession)
-        println "WE HAVE OPEN SESSION #${userSession?.id} " + "SESSION ${userSession.userProperties.session?.id}"
+    public void handleOpen(Session userSession, @PathParam("identity") String identity) {
+        if (identity) {
+            privateClients.add(new WsPrivateClient(userSession, identity))
+        } else {
+            clients.add(userSession)
+        }
     }
 
     @OnMessage
@@ -31,8 +39,25 @@ class AppWebSocketHandler {
         }
     }
 
-    public static sendMessage(String message){
-        clients.findAll { it.isOpen() }.each { it.basicRemote.sendText(message) }
+    public static sendMessage(String message) {
+        sendMessage(new WsMessage(message))
+    }
+
+    public static sendMessage(WsMessage message, String identity = "all-message") {
+        if (identity) {
+            String json = "{}"
+            try {
+                JsonProcessor jsonProcessor = new JsonProcessor()
+                json = jsonProcessor.klassToString(message)
+            } catch (Exception i) {
+                println(i.getMessage())
+            }
+            privateClients.findAll {
+                it.identity && it.identity.equals(identity)
+            }.each { it.session.basicRemote.sendText(json) }
+        } else {
+            clients.findAll { it.isOpen() }.each { it.basicRemote.sendText(message) }
+        }
     }
 
 
@@ -45,15 +70,15 @@ class AppWebSocketHandler {
     @OnError
     public void handleError(Throwable throwable) {
         println("HANDLE ERROR")
-        throwable.printStackTrace()
     }
 
-   private static void initWebSocket(ServletContext servletContext){
-       final ServerContainer serverContainer = servletContext.getAttribute("javax.websocket.server.ServerContainer")
-       serverContainer.addEndpoint(AppWebSocketHandler)
-       serverContainer.defaultMaxSessionIdleTimeout = 0
-       isInit = true
-   }
+
+    private static void initWebSocket(ServletContext servletContext) {
+        final ServerContainer serverContainer = servletContext.getAttribute("javax.websocket.server.ServerContainer")
+        serverContainer.addEndpoint(AppWebSocketHandler)
+        serverContainer.defaultMaxSessionIdleTimeout = 0
+        isInit = true
+    }
 
 
     static void init(final ServletContext servletContext) {
@@ -67,6 +92,7 @@ class AppWebSocketHandler {
                             initWebSocket(servletContext)
                         }
                         clients.removeAll { !it.isOpen() }
+                        privateClients.removeAll { !it.session.isOpen() }
                     }
                     catch (Exception ex) {
                         System.err.println("WebSocket Initilization Exception: ${ex.getMessage()}")

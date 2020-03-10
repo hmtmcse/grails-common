@@ -11,6 +11,19 @@ group "com.hmtmcse.gcommon"
 
 
 dependencies {
+
+}
+
+def dependencyList = [
+        "parser4java"
+]
+
+dependencies {
+    dependencyList.each {
+        if (findProject(":" + it)){
+            compile project(":" + it)
+        }
+    }
     compile group: 'javax.websocket', name: 'javax.websocket-api', version: '1.1'
 }
 
