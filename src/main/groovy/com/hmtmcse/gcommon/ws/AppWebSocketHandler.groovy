@@ -98,7 +98,7 @@ class AppWebSocketHandler {
                         System.err.println("WebSocket Initilization Exception: ${ex.getMessage()}")
                     }
                 }
-            }, 1000L * 10)
+            }, 1000L * 300)
         } catch (Exception e) {
             System.err.println("WebSocket Initilization Exception: ${e.getMessage()}")
         }
